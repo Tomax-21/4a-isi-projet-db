@@ -3,8 +3,10 @@ from sqlalchemy import event
 from sqlmodel import Session, SQLModel, create_engine
 
 from app.db import models  # noqa: F401  (charge les classes pour que SQLModel connaisse les tables)
+from pathlib import Path
 
-DATABASE_URL = "sqlite:///poleat.db"
+ROOT_DIR = Path(__file__).resolve().parent.parent.parent
+DATABASE_URL = f"sqlite:///{ROOT_DIR / 'poleat.db'}"
 
 # check_same_thread=False : FastAPI peut utiliser la base depuis plusieurs threads
 engine = create_engine(DATABASE_URL, connect_args={"check_same_thread": False})
