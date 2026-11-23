@@ -2,7 +2,7 @@
 from sqlalchemy import event
 from sqlmodel import Session, SQLModel, create_engine
 
-from app import models  # noqa: F401  (charge les classes pour que SQLModel connaisse les tables)
+from app.db import models  # noqa: F401  (charge les classes pour que SQLModel connaisse les tables)
 
 DATABASE_URL = "sqlite:///poleat.db"
 
