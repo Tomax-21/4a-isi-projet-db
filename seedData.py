@@ -18,6 +18,7 @@ import datetime as dt
 import hashlib
 import random
 from decimal import Decimal
+import bcrypt
 
 from sqlmodel import Session, SQLModel, create_engine, delete
 
@@ -63,14 +64,11 @@ CLOSED_REASONS = ["Jour férié", "Vacances scolaires", "Inventaire", "Travaux",
 
 
 # === Utilitaires ===========================================================
-def hash_password(pwd: str) -> str:
-    """Hash calculé UNE seule fois (bcrypt si dispo, sinon sha256 de secours)."""
-    try:
-        from passlib.hash import bcrypt
-        return bcrypt.hash(pwd)
-    except Exception:
-        return hashlib.sha256(pwd.encode()).hexdigest()
-
+def hash_password(password):
+    password_bytes = password.encode()
+    salt = bcrypt.gensalt()
+    hashed_bytes = bcrypt.hashpw(password_bytes, salt)
+    return hashed_bytes.decode()
 
 def money(low: float, high: float) -> Decimal:
     return Decimal(str(round(random.uniform(low, high), 2))).quantize(Decimal("0.01"))
